@@ -24,9 +24,21 @@
             pubnub.addListener({
                 message: function(m) {
                     console.log(m);
-                    $('#returnMsg').text(m.message.text);
+
+                    var msg = m.message;
+                    if ('text' in msg) {
+                        var textString = String(msg.text);
+                        $('#returnMsg').text(textString);
+                    }
+                    else if ('data' in msg) {
+                        var dataDigit = Number(msg.data);
+                        $('#returnData').text(dataDigit);
+                        updateChart(dataDigit);
+                    }
                 }
-            })
+            });
+
+            var updateChart = function(){};
 
             pubnub.subscribe({
                     channels: ['rpi']
@@ -80,27 +92,35 @@
 
                 // Code to update chart
                 var xVal = dataArry.length + 1;
-                var yVal = 100;
+                //var yVal = 100;
                 var updateInterval = 1000;
-
-                var updateChart = function() {
-                    dataArry.push({
-                        x: xVal,
-                        y: yVal
-                    });
-
-                    yVal++;
-                    xVal++;
-
-                    // Remove old values
-                    if (dataArry.length > 10) {
-                        dataArry.shift();
+                
+                updateChart = function(yVal) {
+                    console.log('Received yVal = ' + yVal)
+                    if (isNaN(yVal)) {
+                        console.log('Error! yVal is not a number!');
+                        return;
                     }
+                    else {
+                        dataArry.push({
+                            x: xVal,
+                            y: yVal
+                        });
 
-                    chart.render();
+                        xVal++;
+
+                        // Remove old values
+                        if (dataArry.length > 10) {
+                            dataArry.shift();
+                        }
+
+                        chart.render();                        
+                    }
                 }
-                setInterval(function(){updateChart()}, updateInterval);
+                //setInterval(function(){updateChart()}, updateInterval);
             });
+        
+
         </script>
 
     </head>
@@ -109,6 +129,7 @@
         <div id="main">
             <button id="test">Test Button</button>
             <div id='box'>Received message: <div id='returnMsg'></div></div>
+            <div id='box'>Received data: <div id='returnData'></div></div>
             <div id="chartContainer" style="height: 300px; width: 100%;">
             
             </div>
