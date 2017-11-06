@@ -1,3 +1,14 @@
+// ----- General Functions -----
+var updateChart = function(){};
+
+var x = 0;
+var startRand = false;
+var intervalID;
+
+var testMsg = {
+    text: 'test msg number: ' + x
+};
+
 // ----- PubNub Stuff -----
 var pubnub = new PubNub({
     subscribeKey: "sub-c-1089702c-c016-11e7-97ca-5a9f8a2dd46d",
@@ -5,16 +16,9 @@ var pubnub = new PubNub({
     ssl: true
 });
 
-var x = 0;
-
-var testMsg = {
-    text: 'test msg number: ' + x
-};
-
 pubnub.addListener({
     message: function(m) {
         console.log(m);
-
         var msg = m.message;
         if ('text' in msg) {
             var textString = String(msg.text);
@@ -29,8 +33,6 @@ pubnub.addListener({
         }
     }
 });
-
-var updateChart = function(){};
 
 pubnub.subscribe({
         channels: ['rpi']
@@ -57,21 +59,32 @@ $(document).ready( function() {
         );                
     });
 
+    $('#toggleRand').on('click', function(){
+        if (startRand) {
+            clearInterval(intervalID);
+            startRand = false;
+        }
+        else if (!startRand) {
+            intervalID = setInterval(function(){updateChart(randGen(100,90));}, updateInterval);
+            startRand = true;
+        }
+    });
+
     // ----- CanvasJS stuff -----
 
     // Array to hold our data
-    var dataArry = [{x: 0, y:0}];
+    var dataArry = [];
 
     // Create a new chart to hold our data
     var chart = new CanvasJS.Chart("chartContainer", {
         title: {
-            text: "Example Chart"
+            text: "Power Output"
         },
         axisX: {
-            title: "X axis"
+            title: "Time (s)"
         },
         axisY: {
-            title: "Y axis"
+            title: "Power (W)"
         },
         data: [{
             type: "line",
@@ -84,9 +97,12 @@ $(document).ready( function() {
 
     // Code to update chart
     var xVal = dataArry.length + 1;
-    //var yVal = 100;
     var updateInterval = 1000;
     
+    function randGen(offset, mult) {
+        return Math.random() * mult + offset;
+    }
+
     updateChart = function(yVal) {
         console.log('Received yVal = ' + yVal)
         if (isNaN(yVal)) {
@@ -98,16 +114,15 @@ $(document).ready( function() {
                 x: xVal,
                 y: yVal
             });
-
+    
             xVal++;
-
+    
             // Remove old values
             if (dataArry.length > 10) {
                 dataArry.shift();
             }
-
-            chart.render();                        
+    
+            chart.render();
         }
     }
-    //setInterval(function(){updateChart()}, updateInterval);
 });
