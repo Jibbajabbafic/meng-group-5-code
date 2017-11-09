@@ -17,6 +17,24 @@
             <div id="chartContainer" style="height: 300px; width: 100%;">
             </div>
             <button id='toggleRand'>Start/Stop Random Data</button>
+            <div id='statHolder'>
+                <h2>Realtime Outputs</h2>
+                <h3>Electrical</h3>
+                Voltage: <div id='voltageHolder'></div>
+                Current: <div id='currentHolder'></div>
+                Power: <div id='powerHolder'></div>
+                <h3>Mechanical</h3>
+                Bike 1: <div id='rpm1Holder'></div>
+                Bike 2: <div id='rpm2Holder'></div> 
+                Hand Crank: <div id='rpm3Holder'></div>
+                <h2>Loads</h2>
+                <h3>Lights</h3>
+                <div class='loadStatus' id='lightIncan'>Incandescent</div>
+                <div class='loadStatus' id='lightFluor'>Fluorescent</div>
+                <div class='loadStatus' id='lightLED'>LED</div>
+                <h3>Other</h3>
+                ...etc
+            </div>
         </div>
     </body>
 </html>

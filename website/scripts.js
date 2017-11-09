@@ -1,6 +1,56 @@
 // ----- General Functions -----
 var updateChart = function(){};
 
+var holderArry = [
+    // Array to hold all the values
+    {
+        name: 'voltage',
+        id: 'voltageHolder',
+        value: 0
+    },
+    {
+        name: 'current',
+        id: 'currentHolder',
+        value: 0
+    },
+    {
+        name: 'power',
+        id: 'voltageHolder',
+        value: 0
+    },
+    {
+        name: 'rpm1',
+        id: 'rpm1Holder',
+        value: 0
+    },
+    {
+        name: 'rpm2',
+        id: 'rpm2Holder',
+        value: 0
+    },
+    {
+        name: 'rpm3',
+        id: 'rpm3Holder',
+        value: 0
+    },
+];
+
+var updateHolderArry = function(msgObj,arry){
+    // Function to update the HolderArry based on msgObj content
+    arry.forEach(element => {
+        if (element.name in msgObj) {
+            arry.element.value = msgObj[element]
+        };
+    });
+};
+
+var updateHolders = function(arry){
+    // Function to update the HTML elements if matching id found in the array
+    arry.forEach(element => {
+        $(element.id).text(element.value);
+    });
+};
+
 var x = 0;
 var startRand = false;
 var intervalID;
@@ -104,7 +154,7 @@ $(document).ready( function() {
     }
 
     updateChart = function(yVal) {
-        console.log('Received yVal = ' + yVal)
+        console.log('Updating chart with: ' + yVal)
         if (isNaN(yVal)) {
             console.log('Error! yVal is not a number!');
             return;
@@ -114,7 +164,7 @@ $(document).ready( function() {
                 x: xVal,
                 y: yVal
             });
-    
+
             xVal++;
     
             // Remove old values
