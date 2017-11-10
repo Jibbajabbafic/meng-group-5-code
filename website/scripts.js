@@ -1,55 +1,20 @@
 // ----- General Functions -----
-var updateChart = function(){};
 
-var holderArry = [
-    // Array to hold all the values
-    {
-        name: 'voltage',
-        id: 'voltageHolder',
-        value: 0
-    },
-    {
-        name: 'current',
-        id: 'currentHolder',
-        value: 0
-    },
-    {
-        name: 'power',
-        id: 'voltageHolder',
-        value: 0
-    },
-    {
-        name: 'rpm1',
-        id: 'rpm1Holder',
-        value: 0
-    },
-    {
-        name: 'rpm2',
-        id: 'rpm2Holder',
-        value: 0
-    },
-    {
-        name: 'rpm3',
-        id: 'rpm3Holder',
-        value: 0
-    },
-];
+var MAX_DATAPOINTS = 20;
+var timeVal = 0;
 
-var updateHolderArry = function(msgObj,arry){
-    // Function to update the HolderArry based on msgObj content
-    arry.forEach(element => {
-        if (element.name in msgObj) {
-            arry.element.value = msgObj[element]
-        };
-    });
+// Array to hold our data
+var electricStats = {
+    voltageArry: [],
+    currentArry: [],
+    powerArry: [],
+    energyArry: []
 };
 
-var updateHolders = function(arry){
-    // Function to update the HTML elements if matching id found in the array
-    arry.forEach(element => {
-        $(element.id).text(element.value);
-    });
-};
+// var updateChart = function(){};
+// var updateStatArry = function(){};
+// var renderAllCharts = function(){};
+var updateHolders = function(){};
 
 var x = 0;
 var startRand = false;
@@ -69,23 +34,12 @@ var pubnub = new PubNub({
 pubnub.addListener({
     message: function(m) {
         console.log(m);
-        var msg = m.message;
-        if ('text' in msg) {
-            var textString = String(msg.text);
-            $('#returnMsg').text(textString);
-        }
-        if ('data' in msg) {
-            if (msg.data != "") {
-                var dataDigit = Number(msg.data);
-                $('#returnData').text(dataDigit);
-                updateChart(dataDigit);
-            }
-        }
+        updateHolders(m.message, electricStats);
     }
 });
 
 pubnub.subscribe({
-        channels: ['rpi']
+    channels: ['rpi']
 });
 
 // ----- jQuery Functions -----
@@ -122,11 +76,8 @@ $(document).ready( function() {
 
     // ----- CanvasJS stuff -----
 
-    // Array to hold our data
-    var dataArry = [];
-
     // Create a new chart to hold our data
-    var chart = new CanvasJS.Chart("chartContainer", {
+    var chart1 = new CanvasJS.Chart("chartContainer1", {
         title: {
             text: "Power Output"
         },
@@ -138,41 +89,133 @@ $(document).ready( function() {
         },
         data: [{
             type: "line",
-            dataPoints: dataArry
+            dataPoints: electricStats.powerArry
         }]
     });
 
-    // Initial render of chart
-    chart.render();
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        title: {
+            text: "Voltage Output"
+        },
+        axisX: {
+            title: "Time (s)"
+        },
+        axisY: {
+            title: "Voltage (V)"
+        },
+        data: [{
+            type: "line",
+            dataPoints: electricStats.voltageArry
+        }]
+    });
 
-    // Code to update chart
-    var xVal = dataArry.length + 1;
-    var updateInterval = 1000;
-    
+    var chart3 = new CanvasJS.Chart("chartContainer3", {
+        title: {
+            text: "Current Output"
+        },
+        axisX: {
+            title: "Time (s)"
+        },
+        axisY: {
+            title: "Current (A)"
+        },
+        data: [{
+            type: "line",
+            dataPoints: electricStats.currentArry
+        }]
+    });
+
+    var chart4 = new CanvasJS.Chart("chartContainer4", {
+        title: {
+            text: "Cumulative Energy"
+        },
+        axisX: {
+            title: "Time (s)"
+        },
+        axisY: {
+            title: "Energy (J)"
+        },
+        data: [{
+            type: "line",
+            dataPoints: electricStats.energyArry
+        }]
+    });
+
+    var renderAllCharts = function() {
+        chart1.render();
+        chart2.render();
+        chart3.render();
+        chart4.render();
+    }
+
     function randGen(offset, mult) {
         return Math.random() * mult + offset;
     }
 
-    updateChart = function(yVal) {
-        console.log('Updating chart with: ' + yVal)
+    var updateStatArry = function(statObj, statArry, xVal, yVal) {
         if (isNaN(yVal)) {
             console.log('Error! yVal is not a number!');
             return;
         }
         else {
-            dataArry.push({
+            statObj[statArry].push({
                 x: xVal,
                 y: yVal
             });
-
-            xVal++;
-    
-            // Remove old values
-            if (dataArry.length > 10) {
-                dataArry.shift();
-            }
-    
-            chart.render();
         }
-    }
+
+        if (statObj[statArry].length > MAX_DATAPOINTS) {
+            statObj[statArry].shift();
+        };
+    };
+
+    updateHolders = function(msgObj, statsObj) {
+        var power = msgObj.voltage * msgObj.current;
+
+        updateStatArry(statsObj, 'voltageArry', timeVal, msgObj.voltage);
+        updateStatArry(statsObj,'currentArry', timeVal, msgObj.current);
+        updateStatArry(statsObj,'powerArry', timeVal, power);
+        updateStatArry(statsObj,'energyArry', timeVal, power);
+    
+        timeVal++;
+    
+        $(voltageHolder).text(msgObj.voltage);
+        $(currentHolder).text(msgObj.current);
+        $(powerHolder).text(power);
+        $(rpm0Holder).text(msgObj.rpm0);
+        $(rpm1Holder).text(msgObj.rpm1);
+        $(rpm2Holder).text(msgObj.rpm2);
+    
+        renderAllCharts();
+    };
+    // updateChart = function(yVal) {
+    //     console.log('Updating ' + chart + ' with: ' + yVal)
+    //     if (isNaN(yVal)) {
+    //         console.log('Error! yVal is not a number!');
+    //         return;
+    //     }
+    //     else {
+    //         dataArry.push({
+    //             x: xVal,
+    //             y: yVal
+    //         });
+
+    //         xVal++;
+    
+    //         // Remove old values
+    //         if (dataArry.length > 10) {
+    //             dataArry.shift();
+    //         }
+    
+    //         renderAllCharts()
+    //     }
+    // }
+
+    // Initial render of chart
+    renderAllCharts();
+
+    // Code to update chart
+    // var xVal = dataArry.length + 1;
+    // var updateInterval = 1000;
+    
 });
