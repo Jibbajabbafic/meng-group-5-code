@@ -2,6 +2,7 @@
 
 var MAX_DATAPOINTS = 20;
 var timeVal = 0;
+var energyTemp = 0;
 
 // Array to hold our data
 var electricStats = {
@@ -76,7 +77,7 @@ $(document).ready( function() {
 
     // ----- CanvasJS stuff -----
 
-    // Create a new chart to hold our data
+    // Create new charts to hold our data
     var chart1 = new CanvasJS.Chart("chartContainer1", {
         title: {
             text: "Power Output"
@@ -88,6 +89,7 @@ $(document).ready( function() {
             title: "Power (W)"
         },
         data: [{
+            showInLegend: true,
             type: "line",
             dataPoints: electricStats.powerArry
         }]
@@ -104,6 +106,7 @@ $(document).ready( function() {
             title: "Voltage (V)"
         },
         data: [{
+            showInLegend: true,
             type: "line",
             dataPoints: electricStats.voltageArry
         }]
@@ -120,6 +123,7 @@ $(document).ready( function() {
             title: "Current (A)"
         },
         data: [{
+            showInLegend: true,
             type: "line",
             dataPoints: electricStats.currentArry
         }]
@@ -136,6 +140,7 @@ $(document).ready( function() {
             title: "Energy (J)"
         },
         data: [{
+            showInLegend: true,
             type: "line",
             dataPoints: electricStats.energyArry
         }]
@@ -171,11 +176,12 @@ $(document).ready( function() {
 
     updateHolders = function(msgObj, statsObj) {
         var power = msgObj.voltage * msgObj.current;
+        energyTemp += power;
 
         updateStatArry(statsObj, 'voltageArry', timeVal, msgObj.voltage);
         updateStatArry(statsObj,'currentArry', timeVal, msgObj.current);
         updateStatArry(statsObj,'powerArry', timeVal, power);
-        updateStatArry(statsObj,'energyArry', timeVal, power);
+        updateStatArry(statsObj,'energyArry', timeVal, energyTemp);
     
         timeVal++;
     

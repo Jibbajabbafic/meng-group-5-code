@@ -9,33 +9,39 @@
         <script src="scripts.js"></script>
     </head>
     <body>
-        <div id="title"><h1>Realtime Outputs</h1></div>
+        <div id="title"><h1>Outputs Graphs</h1></div>
         <div id="main">
-            <button id="test">Test Button</button>
+            <!-- <button id="test">Test Button</button>
             <div id='box'>Received message: <div id='returnMsg'></div></div>
-            <div id='box'>Received data: <div id='returnData'></div></div>
-                <div id="chartContainer1" style="width: 45%; height: 400px;display: inline-block;"></div>
-                <div id="chartContainer2" style="width: 45%; height: 400px;display: inline-block;"></div><br />
-                <div id="chartContainer3" style="width: 45%; height: 400px;display: inline-block;"></div>
-                <div id="chartContainer4" style="width: 45%; height: 400px;display: inline-block;"></div>
-            <button id='toggleRand'>Start/Stop Random Data</button>
+            <div id='box'>Received data: <div id='returnData'></div></div> -->
+                <div id="chartContainer1" style="width: 24%; height: 300px;display: inline-block;"></div>
+                <div id="chartContainer2" style="width: 24%; height: 300px;display: inline-block;"></div>
+                <div id="chartContainer3" style="width: 24%; height: 300px;display: inline-block;"></div>
+                <div id="chartContainer4" style="width: 24%; height: 300px;display: inline-block;"></div>
+            <!-- <button id='toggleRand'>Start/Stop Random Data</button> -->
+            <h2>Realtime Outputs</h2>
             <div id='statHolder'>
-                <h2>Realtime Outputs</h2>
-                <h3>Electrical</h3>
-                Voltage: <div id='voltageHolder'></div>
-                Current: <div id='currentHolder'></div>
-                Power: <div id='powerHolder'></div>
-                <h3>Mechanical</h3>
-                Bike 1: <div id='rpm0Holder'></div>
-                Bike 2: <div id='rpm1Holder'></div> 
-                Hand Crank: <div id='rpm2Holder'></div>
-                <h2>Loads</h2>
-                <h3>Lights</h3>
-                <div class='loadStatus' id='lightIncan'>Incandescent</div>
-                <div class='loadStatus' id='lightFluor'>Fluorescent</div>
-                <div class='loadStatus' id='lightLED'>LED</div>
-                <h3>Other</h3>
-                ...etc
+                <div style="width: 30%; height: 300px; vertical-align:top; display: inline-block;">
+                    <h3>Electrical</h3>
+                    Voltage: <div id='voltageHolder'></div>
+                    Current: <div id='currentHolder'></div>
+                    Power: <div id='powerHolder'></div>
+                </div>
+                <div style="width: 30%; height: 300px; vertical-align:top; display: inline-block;">
+                    <h3>Mechanical</h3>
+                    Bike 1: <div id='rpm0Holder'></div>
+                    Bike 2: <div id='rpm1Holder'></div> 
+                    Hand Crank: <div id='rpm2Holder'></div>
+                </div>
+                <div style="width: 30%; height: 300px; vertical-align:top; display: inline-block;">
+                    <h2>Loads</h2>
+                    <h3>Lights</h3>
+                    <div class='loadStatus' id='lightIncan'>Incandescent: on</div>
+                    <div class='loadStatus' id='lightFluor'>Fluorescent: off</div>
+                    <div class='loadStatus' id='lightLED'>LED: on</div>
+                    <h3>Other</h3>
+                    ...etc
+                </div>
             </div>
         </div>
     </body>
