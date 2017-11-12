@@ -63,13 +63,13 @@ def send_random():
 
 while True:
     #send_data(get_data(), CHANNEL)
-    loops = input('How much data should be sent?\n')
-    if int(loops) in range(100):
-        for i in range(int(loops)):
+    LOOPS = input('How much data should be sent?\n')
+    if int(LOOPS) in range(100):
+        for i in range(int(LOOPS)):
             print('Sending data: ', i+1)
             send_random()
             sleep(0.5)
-    elif int(loops) < 0:
+    elif int(LOOPS) < 0:
         print("Can't be negative!")
     else:
         print("Try a smaller number")
