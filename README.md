@@ -1,1 +1,1 @@
-# meng-group-5-code
+This repo contains all of the code for the Raspberry Pi display system being used in the Human Powered Electrical Energy Demonstration.
