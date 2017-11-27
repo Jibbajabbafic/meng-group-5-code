@@ -1,0 +1,11 @@
+.chart {
+    width: 24%;
+    height: 300px;
+    display: inline-block;
+}
+.stats {
+    width: 30%; 
+    height: 300px; 
+    vertical-align:top; 
+    display: inline-block;
+}

@@ -1,0 +1,52 @@
+<!DOCType HTML>
+<html>
+	<head>
+        <title>Human Powered Electrical Energy Demonstration</title>
+
+        <!-- Add jQuery, pubnub and load our script -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.17.0.js"></script>
+        <script src="canvasJS/jquery.canvasjs.min.js"></script>
+        <script src="scripts.js"></script>
+
+        <!-- Load custom CSS stylesheet -->
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <div id="title"><h1>Outputs Graphs</h1></div>
+        <div id="main">
+            <!-- <button id="test">Test Button</button>
+            <div id='box'>Received message: <div id='returnMsg'></div></div>
+            <div id='box'>Received data: <div id='returnData'></div></div> -->
+                <div id="chartContainer1" class="chart"></div>
+                <div id="chartContainer2" class="chart"></div>
+                <div id="chartContainer3" class="chart"></div>
+                <div id="chartContainer4" class="chart"></div>
+            <!-- <button id='toggleRand'>Start/Stop Random Data</button> -->
+            <h2>Realtime Outputs</h2>
+            <div id='statHolder'>
+                <div class="stats">
+                    <h3>Electrical</h3>
+                    Voltage: <div id='voltageHolder'></div>
+                    Current: <div id='currentHolder'></div>
+                    Power: <div id='powerHolder'></div>
+                </div>
+                <div class="stats">
+                    <h3>Mechanical</h3>
+                    Bike 1: <div id='rpm0Holder'></div>
+                    Bike 2: <div id='rpm1Holder'></div> 
+                    Hand Crank: <div id='rpm2Holder'></div>
+                </div>
+                <div class="stats">
+                    <h2>Loads</h2>
+                    <h3>Lights</h3>
+                    <div class='loadStatus' id='lightIncan'>Incandescent: on</div>
+                    <div class='loadStatus' id='lightFluor'>Fluorescent: off</div>
+                    <div class='loadStatus' id='lightLED'>LED: on</div>
+                    <h3>Other</h3>
+                    ...etc
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
